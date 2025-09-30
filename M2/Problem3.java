@@ -25,7 +25,27 @@ public class Problem3 extends BaseClass {
         //step4:  use a method to convert back to original type.
         //step5: Use output[i]= ... to assign back to the same slot of the output array.
 
-Object value = arr [i];
+for (int i = 0; i < arr.length; i++) { //loop
+    Object value = arr[i]; //check type
+
+    if (value instanceof Integer) {
+    int positive = Math.abs((Integer) value);
+    output[i] = Integer.valueOf(positive);
+}
+
+else if (value instanceof Double) { 
+    double positive = Math.abs((Double) value);
+    output[i] = Double.valueOf(positive);
+}
+else if (value instanceof Float) {
+    float positive = Math.abs ((Float) value); //makepostitve
+    output [i] = Float.valueOf(positive);
+}
+else {
+    output[i] = value;
+}
+
+}
 
         // End Solution Edits
         System.out.println("Output: ");
