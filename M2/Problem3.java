@@ -17,7 +17,15 @@ public class Problem3 extends BaseClass {
         // Step 3: Add code to solve the problem (add/commit as needed)
         Object[] output = new Object[arr.length];
         // Start Solution Edits
-        
+
+        // Kar65 09.30.25 
+        //Step1: Iterate through the arr by using a loop.
+        //Step2: Use instance to check type 
+        //step3: use Math.Abs to make the posititve
+        //step4:  use a method to convert back to original type.
+        //step5: Use output[i]= ... to assign back to the same slot of the output array.
+
+Object value = arr [i];
 
         // End Solution Edits
         System.out.println("Output: ");
