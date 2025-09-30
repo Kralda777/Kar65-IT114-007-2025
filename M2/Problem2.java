@@ -21,7 +21,10 @@ public class Problem2 extends BaseClass {
         double total = 0;
         // Start Solution Edits
         // Solve Challenge 1 here
+
+        for (int i = 0; i < values.length; i++)
         
+
         //kar65 09.30.2025
         // Step1 : Iterate through the loop by using loop.
         //Step 2 :track sum by adding each interger to total.

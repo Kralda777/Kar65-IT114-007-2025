@@ -20,14 +20,16 @@ public class Problem1 extends BaseClass {
         // step 1:  Itirate through the array
         //Step2: Check if the number is odd 
         //Step3: Using ... to output the off value ensuring its a single line of text
-        //Step4: Iff off print
+        //Step4: If off print
         //Step5: Commas between odd numbers
-        boolean first = true;
-        for (int n : arr) {
-            if (n % 2 != 0) {
-                if (!first) System.out.print(",");
-                System.out.print(n);
-                first = false;
+        
+        for (int i = 0; i < arr.length; i++) {
+                if (arr[i] % 2 != 0) {
+                    System.out.print(arr[i]);
+                if (i < arr.length - 1) {
+                    System.out.print(",");
+                }
+               
             }
         }
 
