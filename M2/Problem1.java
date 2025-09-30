@@ -17,14 +17,16 @@ public class Problem1 extends BaseClass {
         // Start Solution Edits
 
         // Kar65 09-29-2025
-        // step 1: Iterate through the array
-        //Step2:... to determine if odd
+        // step 1:  Itirate through the array
+        //Step2: check if the number is odd 
         //Step3: Using ... to output the off value ensuring its a single line of text
+        //Step4: Iff off print
+        //Step5: Commas between odd numbers
         boolean first = true;
         for (int n : arr) {
             if (n % 2 != 0) {
                 if (!first) System.out.print(",");
-                System.out.println();
+                System.out.print(n);
                 first = false;
             }
         }
