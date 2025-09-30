@@ -22,7 +22,9 @@ public class Problem2 extends BaseClass {
         // Start Solution Edits
         // Solve Challenge 1 here
 
-        for (int i = 0; i < values.length; i++)
+      for (int i = 0; i < arr.length; i++) { //loop
+            total += arr[i]; //adding to total
+        }
         
 
         //kar65 09.30.2025
@@ -30,9 +32,10 @@ public class Problem2 extends BaseClass {
         //Step 2 :track sum by adding each interger to total.
         // Step3: Update representation by formatting total to 2 decimal points and assign to modifiedTotal
 
-      
+        
         // Solve Challenge 2 here
-        Object modifiedTotal = "?";
+        Object modifiedTotal = Double.valueOf(String.format("%.2f", total));
+
 
         // End Solution Edits
         System.out.println("Total Raw Value: " +total);
@@ -54,4 +57,4 @@ public class Problem2 extends BaseClass {
 
     }
 }
-}
+
