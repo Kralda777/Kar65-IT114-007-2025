@@ -20,7 +20,14 @@ public class Problem1 extends BaseClass {
         // step 1: Iterate through the array
         //Step2:... to determine if odd
         //Step3: Using ... to output the off value ensuring its a single line of text
-        
+        boolean first = true;
+        for (int n : arr) {
+            if (n % 2 != 0) {
+                if (!first) System.out.print(",");
+                System.out.println();
+                first = false;
+            }
+        }
 
         // End Solution Edits
         System.out.println("");
