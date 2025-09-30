@@ -15,6 +15,11 @@ public class Problem1 extends BaseClass {
         // Step 3: Add code to solve the problem (add/commit as needed)
         System.out.print("Output Array: ");
         // Start Solution Edits
+
+        // Kar65 09-29-2025
+        // step 1: Iterate through the array
+        //Step2:... to determine if odd
+        //Step3: Using ... to output the off value ensuring its a single line of text
         
 
         // End Solution Edits
@@ -22,7 +27,7 @@ public class Problem1 extends BaseClass {
         System.out.println("______________________________________");
     }
     public static void main(String[] args) {
-        final String ucid = "mt85"; // <-- change to your UCID
+        final String ucid = "Kar65"; // <-- change to your UCID
         // no edits below this line
         printHeader(ucid, 1);
         printOdds(array1,1);
