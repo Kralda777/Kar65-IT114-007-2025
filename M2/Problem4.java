@@ -31,7 +31,22 @@ public class Problem4 extends BaseClass {
         
         for(int i = 0; i <arr.length; i++){
             // Start Solution Edits
+            //Kar65 09.30.25
+            //Step1:  Using replaceAll to remove non-alphaanumeric chracters.(replaceAll("[A-za-z0-9 ]", "")) except spaces.
+            //Step2: Using String methods to make title case.
+            //Step3:Using trip to remove spaces at beginning and end,  using replaceALl to remove duplicate entries.
+            //Step4:Assigning result to placeholderForModifiedPhrase
+            //Step5:Using length() to determine middle
+            //Step6: Using substring to get up to the middle characters
+            //Step7: Using index check to ensure the middle chracters exlude first and last of word/phrase.
+            //Step8: Asigning to placeholderForMiddleCharacters
+
             
+
+
+
+
+
              // End Solution Edits
             System.out.println(String.format("Index[%d] \"%s\" | Middle: \"%s\"",i, placeholderForModifiedPhrase, placeholderForMiddleCharacters));
         }
