@@ -41,9 +41,44 @@ public class Problem4 extends BaseClass {
             //Step7: Using index check to ensure the middle chracters exlude first and last of word/phrase.
             //Step8: Asigning to placeholderForMiddleCharacters
 
-            
+
+            String original = String.valueOf(arr[i]); 
+                String cleaned = original.replaceAll("[^A-Za-z0-9 ]", ""); //removing non-aplhanumerics, kept the spaces
+                cleaned = cleaned.trim().replaceAll("\\s+",""); //trimmed
 
 
+                String[] words = cleaned.isEmpty() ? new String[0] : cleaned.split("");
+                StringBuilder titled = new StringBuilder(); //Titlecase
+                for (int wordIndex = 0; wordIndex < words.length; wordIndex++) {
+                    String word = words [wordIndex];
+                    if (word.isEmpty()) continue;
+                    char first = Character.toUpperCase(word.charAt(0));
+                    String rest = (word.length() > 1 ) ? word.substring(1).toLowerCase() : "";
+                    if (wordIndex > 0) titled.append(" ");
+                    titled.append(first).append(rest);
+                    titled.append(first).append(rest);
+                }
+
+
+                placeholderForModifiedPhrase = titled.toString(); //Step4
+
+                //Challenge 4
+
+                String s = placeholderForModifiedPhrase;
+                if(s.length() <= 2) {
+                    placeholderForMiddleCharacters = " Not enough characters";
+                } else{
+                    int n = s.length();
+                    int start = n/2; 
+                    if (start ==0) start = 1; //Skipping first character
+                    if (start >= n -1) start = n- 2; // Skipping last character
+                    int end = Math.min(start + 3, n - 1);
+                    if (end <= start) {
+                        placeholderForMiddleCharacters = "Not enough characters";
+                    } else {
+                        placeholderForMiddleCharacters = s.substring(start, end);
+                    }
+            }
 
 
 
