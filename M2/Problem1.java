@@ -17,7 +17,7 @@ public class Problem1 extends BaseClass {
         // Start Solution Edits
 
         // Kar65 09-29-2025
-        // step 1:  Itirate through the array
+        // step 1:  Itirate through the array using loop
         //Step2: Check if the number is odd 
         //Step3: Using ... to output the off value ensuring its a single line of text
         //Step4: If off print
