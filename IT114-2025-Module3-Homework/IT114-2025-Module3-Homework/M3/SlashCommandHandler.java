@@ -88,7 +88,7 @@ public class SlashCommandHandler extends BaseClass {
                 } catch (NumberFormatException e) {
                  System.out.println("Format error: Use intergers for <num> and <sides> (e.g., /roll 2d6)");
             
-                 }
+                }
              }
         }
 

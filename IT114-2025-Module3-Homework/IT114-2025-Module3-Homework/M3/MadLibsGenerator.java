@@ -18,7 +18,7 @@ Challenge 3: Mad Libs Generator (Randomized Stories)
 
 public class MadLibsGenerator extends BaseClass {
     private static final String STORIES_FOLDER = "M3/stories";
-    private static String ucid = "mt85"; // <-- change to your ucid
+    private static String ucid = "kar65"; // <-- change to your ucid
 
     public static void main(String[] args) {
         printHeader(ucid, 3,
@@ -38,12 +38,90 @@ public class MadLibsGenerator extends BaseClass {
 
         // load a random story file
 
+        File[] allFiles + folder.listFiles();
+        java.util.List<File> storyFiles = new java.util.ArrayList<>();
+        if (allFiles != null) {
+            for (File f : allFiles) {
+                if (f.isFile()) storyFiles.add(f);
+            }
+        }
+
         // parse the story lines
 
         // iterate through the lines
 
+        if (storyFiles.isEmpty()) {
+            System,out.println("Error: No story found in " + STORIES_FOLDER);
+            printFooter(ucid,3);
+            scanner.close();
+            return;
+        }
+
         // prompt the user for each placeholder (note: there may be more than one
         // placeholder in a line)
+
+        java.util.Random rng = new java.util.Random();
+        File chosen = storyFiles.get(rng.nextInt(storyFiles.size()));
+        System.out.println("loaded story file: " chosen.getName());
+
+        //read 
+        try (Scanner fileReader = new Scanner(chosen, "UTF-8"))) {
+            while (fileReader.hasNextline()) {
+               lines.add(fileReader.nextLine());
+            }
+        } catch (Exception e) {
+           System.out.println("Error reading story file: " + e.getMessage());
+           prrintFooter(ucid, 3);
+           scanner.close();
+           return;
+
+    }
+    
+    java.util.LinkedHashSet<String> placeholders = new java.util.LinkedHashSet<>();
+
+    for (String line : lines) {
+        int start = 0;
+        while (true) {
+              int open = line.indexOf('<', startIndex);
+              if (open == -1) break;
+              int close = line.indexOf('>', open + 1);
+              if (close == -1) break;
+              String token = line.substring(open + 1. close); 
+              placeholders.add(token);
+              start= close + 1;
+        }
+    }
+
+    //prompt for placeholder
+
+    java.util.Map<String, String> answers = new java.util.HashMap<>;
+    for (String token : placeholders) {
+        String nice = token.replace('_' , ' ' );
+        String answer = "";
+        while (answer.isBlank()) {
+            System.out.print("Enter a " + nice + ":");
+            answer = scanner.nextLine().trim();
+            if (answer.isBlamk()) {
+                System.out.println("(Any word is fine;dont leave blank.))");
+
+            }
+        }
+        answers.put(token,answer);
+    }
+
+    for (int i = 0; i < lines.size(); i++) {
+        String line = lines.get(i);
+        for (java.util.Map.Entry<String, String> e : answers.entrySet()) {
+            String token = e.getKey();
+            String word = e.getValue();
+            line = line.replace("<" + token + ">", word);
+
+        }
+        lines.set(i, line); 
+    }
+
+
+
 
         // apply the update to the same collection slot
 
