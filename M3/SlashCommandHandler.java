@@ -17,7 +17,7 @@ Challenge 2: Simple Slash Command Handler
 import java.util.Scanner;
 
 public class SlashCommandHandler extends BaseClass {
-    private static String ucid = "kar65"; // <-- change to your UCID
+    private static String ucid = "Kar65"; // <-- change to your UCID
 //Kar65 //October13
     public static void main(String[] args) {
         printHeader(ucid, 2, "Objective: Implement a simple slash command parser.");
@@ -62,7 +62,7 @@ public class SlashCommandHandler extends BaseClass {
                 }
             }
 
-            else if (lower.startsWith("/roll ")) {
+            else if (lower.startsWith("/roll")) {
                 String spec = line.substring(6).trim();
                 int dPos = Math.max(spec.indexOf('d'), spec.indexOf('D'));
 
@@ -83,7 +83,7 @@ public class SlashCommandHandler extends BaseClass {
                             sum += rng.nextInt(sides) + 1;
                             
                         }
-                        System.out.println("Rolled " + num + "d" + sides +  " and got " + sum + "!");
+                        System.out.println("Rolled " + num + "d" + sides +  " and got" + sum + "!");
                     }
                 } catch (NumberFormatException e) {
                  System.out.println("Format error: Use intergers for <num> and <sides> (e.g., /roll 2d6)");
@@ -93,7 +93,7 @@ public class SlashCommandHandler extends BaseClass {
         }
 
         else if (lower.startsWith("/")) {
-            System.out.println("unknown command. Try /greet, /roll, /echo, or /quit.");
+            System.out.println("unkown command. Try /greet, /roll, /echo, or /quit.");
         }
 
         else {
