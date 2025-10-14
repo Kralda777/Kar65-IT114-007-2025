@@ -12,7 +12,7 @@ Challenge 1: Command-Line Calculator
 */
 
 public class CommandLineCalculator extends BaseClass {
-    private static String ucid = "mt85"; // <-- change to your ucid
+    private static String ucid = "Kar65"; // <-- change to your ucid
 
     public static void main(String[] args) {
         printHeader(ucid, 1, "Objective: Implement a calculator using command-line arguments.");
@@ -25,21 +25,42 @@ public class CommandLineCalculator extends BaseClass {
 
         try {
             System.out.println("Calculating result...");
-            // extract the equation (format is <num1> <operator> <num2>)
+            //Kar65 //October 13th, 2025 
+            //Integer numer the user inputs, operator, second number. Keeps them as strings
+            String num1Text = args[0];
+            String operator = args[1].trim();
+            String num2Text= args[2];
+// Allowing only + or -
+            if (!operator.equals("+") && !operator.equals("-")) {
+                 System.out.println("Unsupported operator: " + operator + ". Use + or - only.");
+                 printFooter(ucid,1);
+                 return;
 
-            // check if operator is addition or subtraction
+            }
+            // turning into real numbers 
+            double a = Double.parseDouble(num1Text);
+            double b = Double.parseDouble(num2Text);
 
-            // check the type of each number and choose appropriate parsing
+            //decimals
+            int decimals = Math.max(countDecimals(num1Text), countDecimals(num2Text));
+            double result = operator.equals("+") ? a + b : a - b;
 
-            // generate the equation result (Important: ensure decimals display as the
-            // longest decimal passed)
-            // i.e., 0.1 + 0.2 would show as one decimal place (0.3), 0.11 + 0.2 would shows
-            // as two (0.31), etc
+            System.out.printf("%s %s %s = %." + decimals + "f%n", num1Text, operator, num2Text, result);
+
+            
 
         } catch (Exception e) {
             System.out.println("Invalid input. Please ensure correct format and valid numbers.");
         }
 
         printFooter(ucid, 1);
+    }
+
+    
+     private static int countDecimals(String s) {
+        int dot = s.indexOf('.');
+        if (dot < 0) return 0;
+        return s.length() - dot - 1;
+
     }
 }
