@@ -1,3 +1,4 @@
+// UCID: kar65 — Section 2 solved: /greet, /echo, /roll, /quit with errors
 package M3;
 
 /*
