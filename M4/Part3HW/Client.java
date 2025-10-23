@@ -97,7 +97,7 @@ public class Client {
      * @param text
      * @return true if the text was a command or triggered a command
      * @throws IOException
-     */
+     *///Karen Ralda //kar65 // October21,2025
     private boolean processClientCommand(String text) throws IOException {
         boolean wasCommand = false;
         if (isConnection(text)) {
@@ -121,7 +121,12 @@ public class Client {
             String[] commandData = { Constants.COMMAND_TRIGGER, "reverse", text };
             sendToServer(String.join(",", commandData));
             wasCommand = true;
+        } else if ("/flip".equalsIgnoreCase(text.trim())) {
+            String[] commandData = { Constants.COMMAND_TRIGGER, "flip" };
+            sendToServer(String.join(",", commandData));
+            wasCommand = true;
         }
+
         return wasCommand;
     }
 

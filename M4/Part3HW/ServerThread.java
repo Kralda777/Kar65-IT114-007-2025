@@ -170,6 +170,7 @@ public class ServerThread extends Thread {
      * @param sender
      * @return true if it was a command, false otherwise
      */
+    ///KarenRalda //kar65 //October21st,2025
     private boolean processCommand(String message) {
         boolean wasCommand = false; // control var to use as the return status
 
@@ -203,6 +204,11 @@ public class ServerThread extends Thread {
                         break;
                     // added more cases/breaks as needed for other commands
                     default:
+                        break;
+
+                    case "flip" :
+                        server.flipCoin(this);
+                        wasCommand = true;
                         break;
                 }
             }

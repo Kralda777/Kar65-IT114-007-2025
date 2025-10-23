@@ -126,7 +126,14 @@ public class Server {
         String rev = sb.toString();
         relay(sender, rev);
     }
+///Karenralda //kar65 //Ocotber21st,2025
 
+    protected synchronized void flipCoin(ServerThread sender) {
+        String who = "User[" + sender.getClientId() + "]";
+        String result = (Math.random() < 0.5) ? "Heads" : "Tails";
+        relay(null, String.format("%s flipped a coin and got %s", who, result));
+    }
+    
     protected synchronized void handleMessage(ServerThread sender, String text) {
         relay(sender, text);
     }
