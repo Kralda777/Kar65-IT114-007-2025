@@ -169,12 +169,34 @@ public class ServerThread extends Thread {
      * @param message
      * @param sender
      * @return true if it was a command, false otherwise
-     */
+     *///KarenRalda //kar65 //10.23.25
     private boolean processCommand(String message) {
         boolean wasCommand = false; // control var to use as the return status
 
         // using "[cmd]" as a temporary trigger until we update how the data is passed
         // over the socket
+        //mycode
+        if (message !=null && message.startsWith("/pm")) {
+            String[] p = message.trim().split("\\s+", 3);
+            if (p.length < 3) {
+                sendToClient("Usage: /pm <target id> <message>");
+                return true;
+            
+            }
+            for (char c : p[1]/toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    sendToClient("Target id must be a number");
+                    return true;
+            }
+
+
+        }
+        long toId = Long.paseLong(p[1]);
+        String pm = p[2];
+
+        server.sendPrivateMessage(This, toId, pm);
+        return true; 
+    }
         if (message.startsWith(Constants.COMMAND_TRIGGER)) {
             // expected format will be csv for now to keep it simple
             String[] commandData = message.split(",");
