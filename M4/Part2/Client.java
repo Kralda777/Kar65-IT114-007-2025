@@ -88,7 +88,7 @@ public class Client {
     /**
      * Controller for handling various text commands.
      * <p>
-     * Add more here as needed
+     * //KarenRalda //Kar65 //10/23/25
      * </p>
      * 
      * @param text
@@ -96,15 +96,22 @@ public class Client {
      */
     private boolean processClientCommand(String text) {
         if (isConnection(text)) {
-            // replaces multiple spaces with single space
-            // splits on the space after connect (gives us host and port)
-            // splits on : to get host as index 0 and port as index 1
             String[] parts = text.trim().replaceAll(" +", " ").split(" ")[1].split(":");
             connect(parts[0].trim(), Integer.parseInt(parts[1].trim()));
             return true;
-        } else if ("/quit".equalsIgnoreCase(text)) {
-            isRunning = false;
-            return true;
+        } if ("/quit".equalsIgnoreCase(text)) { isrunning = false; return true; }
+
+        
+        
+        if (text !=null && text.startsWith("/pm ")) {
+            String[] p = text.trim().split("\\s"+ 3);
+             if (p.length < 3) {System.out.println("Usage: /pm <target id> <message>"); return true; }
+            if (!p[1]matches("\\d+")) { System.out.println("Target id must be a number."); return true; }      
+            if (!isConnected()) { System.out.println("Not connected to the server"); return true; }
+pm          out.println("/pm" + p[1] + " " + p[2]);
+            if (out.checkError()) System.out.println("Connection may be lost");
+        
+             return true;
         }
         return false;
     }

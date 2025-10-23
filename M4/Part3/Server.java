@@ -115,7 +115,7 @@ public class Server {
      * Expose access to the disconnect action
      * 
      * @param serverThread
-     */
+     *///Karenralda //Kar65 //10.23.25
     protected synchronized void handleDisconnect(ServerThread sender) {
         disconnect(sender);
     }
@@ -125,6 +125,10 @@ public class Server {
         sb.reverse();
         String rev = sb.toString();
         relay(sender, rev);
+    }
+        String who = "User[" + sender.getClientId() + "]";
+        String result = (Math.random() < 0.5) ? "Heads" : "Tails";
+        relay(null, String.format("%s flipped a coin and got %s", who, result));
     }
 
     protected synchronized void handleMessage(ServerThread sender, String text) {

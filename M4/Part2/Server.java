@@ -6,10 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import  java.util.HashMap;
 
 public class Server {
     private int port = 3000;
-
+//KarenRalda //Kar65 //10.23.25
+private final HashMap<Integer, ServerThread> clients = new HashMap<>();
     private void start(int port) {
         this.port = port;
         System.out.println("Listening on port " + this.port);
@@ -51,6 +53,20 @@ public class Server {
             e.printStackTrace();
         } finally {
             System.out.println("closing server socket");
+        }
+    }
+
+    public void sendPrivateMessage(int fromId, int toId, String message) {
+        ServerThread from = clients.get(fromId);
+        ServerThread to  = clients.get(toId);
+
+        String line = "PM from " + fromId + ":" + message; //format
+
+        if (from != null) { from.sendToClient(line); }
+        if (to != null && to !=from) { to.sendToClient(line); }
+
+        if (to ==null && from != null) {
+            from.send("User " + toId + " is not online. ");
         }
     }
 

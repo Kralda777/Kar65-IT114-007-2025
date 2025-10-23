@@ -133,7 +133,22 @@ public class Server {
         String result = (Math.random() < 0.5) ? "Heads" : "Tails";
         relay(null, String.format("%s flipped a coin and got %s", who, result));
     }
-    
+
+    public synchronized void sendPrivateMessage(ServerThread from, long toId, String msg) {
+        if (from == null) return;
+
+        ServerThread to = connectedClients.get(toId);
+        if (to !=null && to !=from) {
+            to.sendToClient("PM from " + from.getClientId() + ":" + msg);
+            from.sendToClient("PM to " + toId + ": " + msg);
+        } else {
+            from.sendToClient("User " + toId + " is not online.");
+        }
+
+        
+
+    }
+
     protected synchronized void handleMessage(ServerThread sender, String text) {
         relay(sender, text);
     }

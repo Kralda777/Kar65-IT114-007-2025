@@ -183,7 +183,7 @@ public class ServerThread extends Thread {
                 return true;
             
             }
-            for (char c : p[1]/toCharArray()) {
+            for (char c : p[1].toCharArray()) {
                 if (!Character.isDigit(c)) {
                     sendToClient("Target id must be a number");
                     return true;
@@ -191,10 +191,10 @@ public class ServerThread extends Thread {
 
 
         }
-        long toId = Long.paseLong(p[1]);
+        long toId = Long.parseLong(p[1]);
         String pm = p[2];
 
-        server.sendPrivateMessage(This, toId, pm);
+        sendToClient("[PM disabled for Task 1] To " + toId + ": " + pm);
         return true; 
     }
         if (message.startsWith(Constants.COMMAND_TRIGGER)) {

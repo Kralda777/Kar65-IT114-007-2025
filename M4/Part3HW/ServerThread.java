@@ -174,6 +174,29 @@ public class ServerThread extends Thread {
     private boolean processCommand(String message) {
         boolean wasCommand = false; // control var to use as the return status
 
+        if (message != null && message.startsWith("/pm")) {
+            String[] p = message.trim().split("\\s+", 3); //myissue
+            if (p.length < 3) {
+                sendToClient("Usage: /pm <target Id> <message>");
+                return true;
+            }
+
+            for (char c : p[1].toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    sendToClient("Target Id must be a number");
+                    return true;
+                }
+            }
+            
+        }
+        long toId = Long.parseLong(p[1]);
+        String pm = p[2];
+
+        server.sendPrivateMessage(this,toId, pm);
+        return true;
+
+    }
+
         // using "[cmd]" as a temporary trigger until we update how the data is passed
         // over the socket
         if (message.startsWith(Constants.COMMAND_TRIGGER)) {
@@ -228,4 +251,5 @@ public class ServerThread extends Thread {
         }
         info("ServerThread cleanup() end");
     }
-}
+
+
