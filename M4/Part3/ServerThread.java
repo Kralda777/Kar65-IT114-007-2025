@@ -207,7 +207,20 @@ public class ServerThread extends Thread {
         }
         server.sendPrivateMessage(this.clientId, toId, pm);
         return true;
+//KarenRalda //10.23.25
+    }
 
+    else if (trimmed.toLowerCase().startsWith("/shuffle ")) {
+        String raw = trimmed.substring(9).trim();
+        if (raw.isEmpty()) {
+        sendToClient("Usage: /shuffle <message>");
+        return true;
+        }
+        server.shuffleMessage(this, raw);
+        wasCommand = true;
+        return true;
+
+    
     }
         if (message.startsWith(Constants.COMMAND_TRIGGER)) {
             // expected format will be csv for now to keep it simple

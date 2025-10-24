@@ -133,7 +133,11 @@ public class Client {
             String[] commandData = { Constants.COMMAND_TRIGGER, "flip" };
             sendToServer(String.join(",", commandData));
             wasCommand = true;
-    
+    //KarenRalda //10.23.25 //kar65
+        } else if (text != null && text.trim().startsWith("/shuffle ")) {
+            sendToServer(text.trim());
+            wasCommand = true;
+
         }
         
         return wasCommand;
