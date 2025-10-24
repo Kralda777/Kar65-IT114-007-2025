@@ -161,6 +161,7 @@ public class ServerThread extends Thread {
             server.handleMessage(this, incoming);
         }
 
+        
     }
 
     /**
@@ -171,31 +172,42 @@ public class ServerThread extends Thread {
      * @return true if it was a command, false otherwise
      *///KarenRalda //kar65 //10.23.25
     private boolean processCommand(String message) {
-        boolean wasCommand = false; // control var to use as the return status
+       if (message == null) return false;
+       
+       boolean wasCommand = false;
+       String trimmed = message.trim(); // control var to use as the return status
 
         // using "[cmd]" as a temporary trigger until we update how the data is passed
         // over the socket
         //mycode
-        if (message !=null && message.startsWith("/pm")) {
-            String[] p = message.trim().split("\\s+", 3);
+        if (trimmed.startsWith("/pm")) {
+            wasCommand = true;
+
+            String[] p = trimmed.split("\\s+", 3);
             if (p.length < 3) {
                 sendToClient("Usage: /pm <target id> <message>");
-                return true;
-            
-            }
-            for (char c : p[1].toCharArray()) {
-                if (!Character.isDigit(c)) {
-                    sendToClient("Target id must be a number");
-                    return true;
-            }
-
+            return true;
 
         }
-        long toId = Long.parseLong(p[1]);
-        String pm = p[2];
 
-        sendToClient("[PM disabled for Task 1] To " + toId + ": " + pm);
-        return true; 
+        String idPart = p[1];
+
+        for (char c : idPart.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                sendToClient("Target id must be a number");
+                return true;
+            }
+        }
+
+        long toId = Long.parseLong(idPart);
+        String pm = p[2].trim();
+        if (pm.isEmpty()) {
+            sendToClient("Message cannot be empty. Use: /pm <targetId> <message>");
+            return true; 
+        }
+        server.sendPrivateMessage(this.clientId, toId, pm);
+        return true;
+
     }
         if (message.startsWith(Constants.COMMAND_TRIGGER)) {
             // expected format will be csv for now to keep it simple
@@ -244,4 +256,5 @@ public class ServerThread extends Thread {
         }
         info("ServerThread cleanup() end");
     }
+
 }

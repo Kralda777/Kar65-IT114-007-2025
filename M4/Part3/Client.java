@@ -100,6 +100,7 @@ public class Client {
      */
     private boolean processClientCommand(String text) throws IOException {
         boolean wasCommand = false;
+
         if (isConnection(text)) {
             // replaces multiple spaces with a single space
             // splits on the space after connect (gives us host and port)
@@ -120,8 +121,21 @@ public class Client {
             // index 0 = trigger, index 1 = command, index N = command data
             String[] commandData = { Constants.COMMAND_TRIGGER, "reverse", text };
             sendToServer(String.join(",", commandData));
+            wasCommand = true; 
+        //KarenRalda //kar65 //10.23.25
+
+        } else if (text != null && text.trim().startsWith("/pm")) {
+            sendToServer(text.trim());
             wasCommand = true;
+
+
+        } else if ("/flip".equalsIgnoreCase(text.trim())) {
+            String[] commandData = { Constants.COMMAND_TRIGGER, "flip" };
+            sendToServer(String.join(",", commandData));
+            wasCommand = true;
+    
         }
+        
         return wasCommand;
     }
 

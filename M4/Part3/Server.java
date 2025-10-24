@@ -125,17 +125,32 @@ public class Server {
         sb.reverse();
         String rev = sb.toString();
         relay(sender, rev);
-    }
-        String who = "User[" + sender.getClientId() + "]";
-        String result = (Math.random() < 0.5) ? "Heads" : "Tails";
-        relay(null, String.format("%s flipped a coin and got %s", who, result));
+    
     }
 
     protected synchronized void handleMessage(ServerThread sender, String text) {
         relay(sender, text);
-    }
-    // end handle actions
+    }//Karenralda //10.23.25 //kar65
 
+    public void sendPrivateMessage(long fromId, long toId, String message) {
+
+  
+    ServerThread from = connectedClients.get(fromId);
+    ServerThread to = connectedClients.get(toId);
+
+    if (from == null) return;
+    if (to == null) {
+        from.sendToClient("User " + toId + " is not online.");
+        return;
+    }
+
+    String payload = String.format("Server: PM from %d: %s", fromId, message);
+
+    from.sendToClient(payload);
+    to.sendToClient(payload);
+
+    System.out.printf("[Server] Relayed PM from %d -> %d: %s%n", fromId, toId, message);
+    }
     public static void main(String[] args) {
         System.out.println("Server Starting");
         Server server = new Server();
