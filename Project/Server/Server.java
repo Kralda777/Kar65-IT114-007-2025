@@ -1,23 +1,42 @@
-package M4.Part3;
+package Project.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Server {
     private int port = 3000;
     // connected clients
     // Use ConcurrentHashMap for thread-safe client management
     // the Long will be a unique client identifier, and ServerThread is the instance
-    private final ConcurrentHashMap<Long, ServerThread> connectedClients = new ConcurrentHashMap<>();
-    private boolean isRunning = true;
+   //KarenRalda //Kar65 //Nov3rd,2025  
+   private final ConcurrentHashMap<Long, ServerThread> connectedClients = new ConcurrentHashMap<>();
+
+   private final ConcurrentHashMap<String, CopyOnWriteArraySet<ServerThread>> rooms = new ConcurrentHashMap<>();
+   private final ConcurrentHashMap<ServerThread, String> clientRoom = new ConcurrentHashMap<>();
+
+    private void initLobby() {
+        rooms.computeIfAbsent("lobby", k -> new CopyOnWriteArraySet<>());
+
+    }
+  
+   private boolean isRunning = true;
+
+    private void roomLog(String msg) {
+        System.out.println("[ROOM]" + msg );
+    }
 
     private void start(int port) {
         this.port = port;
         // server listening
         System.out.println("Listening on port " + this.port);
+        roomLog("default lobby ready");
+        initLobby();
+    
         // Simplified client connection loop
+        //KarenRalda //Kar65 //11/03/25
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (isRunning) {
                 System.out.println("Waiting for next client");
@@ -37,8 +56,9 @@ public class Server {
         } finally {
             System.out.println("Closing server socket");
         }
+    
     }
-
+//Karen Ralda //Kar65 //11/04/25
     /**
      * Callback passed to ServerThread to inform Server they're ready to receive
      * data
@@ -46,6 +66,11 @@ public class Server {
      * @param serverThread
      */
     private void onServerThreadInitialized(ServerThread serverThread) {
+        initLobby();
+        rooms.get("lobby").add(serverThread);
+        clientRoom.put(serverThread, "lobby");
+
+        roomLog(serverThread.getClientId() + "initialized; places in lobby");
         // add to connected clients list (unique id and actual reference)
         connectedClients.put(serverThread.getClientId(), serverThread);
         relay(null, String.format("*User[%s] connected*", serverThread.getClientId()));
@@ -64,6 +89,7 @@ public class Server {
         // remove disconnecting ServerThread from map
         ServerThread disconnectingServerThread = connectedClients.remove(serverThread.getClientId());
         if (disconnectingServerThread != null) {
+            roomLog(disconnectingServerThread.getClientId() + " left loy");
             // Improved logging with user ID
             relay(null, "User[" + disconnectingServerThread.getClientId() + "] disconnected");
         }
@@ -115,7 +141,7 @@ public class Server {
      * Expose access to the disconnect action
      * 
      * @param serverThread
-     *///Karenralda //Kar65 //10.23.25
+     */
     protected synchronized void handleDisconnect(ServerThread sender) {
         disconnect(sender);
     }
@@ -125,49 +151,88 @@ public class Server {
         sb.reverse();
         String rev = sb.toString();
         relay(sender, rev);
-    
+    }
+///Karenralda //kar65 //Ocotber21st,2025
+
+    protected synchronized void flipCoin(ServerThread sender) {
+        String who = "User[" + sender.getClientId() + "]";
+        String result = (Math.random() < 0.5) ? "Heads" : "Tails";
+        relay(null, String.format("%s flipped a coin and got %s", who, result));
     }
 
-    //KareRalda //10.23.25 //Kar65
-    protected synchronized void shuffleMessage(ServerThread sender, String message) {
-        String who = String.valueOf(sender.getClientId());
-        String shuffled = shuffle(message);
-        String payload = String.format("Shuffled from %s: %s", who, shuffled);
-        relay(null, payload);
-    }
+    public synchronized void sendPrivateMessage(ServerThread from, long toId, String msg) {
+        if (from == null) return;
 
-    private String shuffle(String s) {
-        java.util.List<java.lang.Character> chars = new java.util.ArrayList<>(s.length());
-        for (char c : s.toCharArray()) chars.add(c);
-        java.util.Collections.shuffle(chars);
-        StringBuilder sb = new StringBuilder(chars.size());
-        for (char c : chars) sb.append(c);
-        return sb.toString();
-    }
+        ServerThread to = connectedClients.get(toId);
+        if (to !=null && to !=from) {
+            to.sendToClient("PM from " + from.getClientId() + ":" + msg);
+            from.sendToClient("PM to " + toId + ": " + msg);
+        } else {
+            from.sendToClient("User " + toId + " is not online.");
+        }
 
+        
+
+    }
+//Karenralda //Kar65 //Nov052025
     protected synchronized void handleMessage(ServerThread sender, String text) {
         relay(sender, text);
-    }//Karenralda //10.23.25 //kar65
-
-    public void sendPrivateMessage(long fromId, long toId, String message) {
-
-  
-    ServerThread from = connectedClients.get(fromId);
-    ServerThread to = connectedClients.get(toId);
-
-    if (from == null) return;
-    if (to == null) {
-        from.sendToClient("User " + toId + " is not online.");
-        return;
     }
 
-    String payload = String.format("Server: PM from %d: %s", fromId, message);
+    protected synchronized void createRoom(String name) {
+        if (name == null || name.isBlank() || "lobby".equalsIgnoreCase(name)) return;
+        rooms.computeIfAbsent(name, k -> new CopyOnWriteArraySet<>());
+        roomLog("created room " + name);
 
-    from.sendToClient(payload);
-    to.sendToClient(payload);
-
-    System.out.printf("[Server] Relayed PM from %d -> %d: %s%n", fromId, toId, message);
     }
+
+    protected synchronized void joinRoom(ServerThread who, String name) {
+        if (who == null || name == null || name.isBlank()) return;
+        rooms.computeIfAbsent(name, k -> new CopyOnWriteArraySet<>());
+
+        String prev = clientRoom.get(who);
+        if (prev != null) {
+            var set = rooms.get(prev);
+            if (set != null) {
+                set.remove(who);
+                roomLog(who.getClientId() + "left " + prev);
+                removeRoomIfEmpty(prev);
+
+            }
+        }
+
+        rooms.get(name).add(who);
+        clientRoom.put(who, name);
+        roomLog(who.getClientId() + "joined" + name);
+    }
+
+    protected synchronized void leaveRoom(ServerThread who) {
+        if (who == null) return;
+
+        String prev = clientRoom.get(who);
+        if (prev !=null && !"lobby".equals(prev)) {
+            var set = rooms.get(prev);
+            if (set != null) {
+                set.remove(who);
+                roomLog(who.getClientId() + " left " + prev);
+                removeRoomIfEmpty(prev);
+            }
+        }
+        rooms.get("lobby").add(who);
+        clientRoom.put(who, "lobby");
+        roomLog(who.getClientId() + "joined lobby");
+    }
+
+    private void removeRoomIfEmpty(String name) {
+        if ("lobby".equals(name)) return;
+        var set = rooms.get(name);
+        if(set != null && set.isEmpty()) {
+            rooms.remove(name);
+            roomLog("removed room " + name);
+        }
+    }
+    // end handle actions
+
     public static void main(String[] args) {
         System.out.println("Server Starting");
         Server server = new Server();

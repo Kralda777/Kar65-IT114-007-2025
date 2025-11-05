@@ -1,4 +1,4 @@
-package M4.Part3;
+package Project.Server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,7 +8,10 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import M4.Part3.TextFX.Color;
+import Project.Common.TextFX.Color;
+import Project.Common.TextFX;
+import Project.Common.Constants;
+
 
 /**
  * A server-side representation of a single client
@@ -161,7 +164,6 @@ public class ServerThread extends Thread {
             server.handleMessage(this, incoming);
         }
 
-        
     }
 
     /**
@@ -170,58 +172,62 @@ public class ServerThread extends Thread {
      * @param message
      * @param sender
      * @return true if it was a command, false otherwise
-     *///KarenRalda //kar65 //10.23.25
+     */
+    ///KarenRalda //kar65 //October21st,2025
     private boolean processCommand(String message) {
-       if (message == null) return false;
-       
-       boolean wasCommand = false;
-       String trimmed = message.trim(); // control var to use as the return status
+        boolean wasCommand = false; // control var to use as the return status
+        if (message != null && message.startsWith("/createroom")) {
+            String[] p = message.trim().split("\\s+", 2);
+            if (p.length < 2 || p[1].isBlank()) {
+                sendToClient("Usage: /createroom <name>");
+                return true;
+            }
+            server.createRoom(p[1].trim());
+            return true;
+        }
+
+        if (message != null && message.startsWith("/joinroom")) {
+            String[] p = message.trim().split("\\s+", 2);
+            if (p.length < 2 || p[1].isBlank()) {
+                sendToClient("Usage: /joinroom <name>");
+                return true;
+            }
+            server.joinRoom(this, p[1].trim());
+            return true;
+        }
+        
+        if (message != null && message.startsWith("/leaveroom")) {
+            server.leaveRoom(this);
+            return true;
+        }
+        
+
+        if (message != null && message.startsWith("/pm")) {
+            String[] p = message.trim().split("\\s+", 3); //myissue
+            if (p.length < 3) {
+                sendToClient("Usage: /pm <target Id> <message>");
+                return true;
+            }
+
+            for (char c : p[1].toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    sendToClient("Target Id must be a number");
+                    return true;
+                }
+            }
+            
+        
+        long toId = Long.parseLong(p[1]);
+        String pm = p[2];
+
+        server.sendPrivateMessage(this,toId, pm);
+        return true;
+        }
+
+    
 
         // using "[cmd]" as a temporary trigger until we update how the data is passed
         // over the socket
-        //mycode
-        if (trimmed.startsWith("/pm")) {
-            wasCommand = true;
-
-            String[] p = trimmed.split("\\s+", 3);
-            if (p.length < 3) {
-                sendToClient("Usage: /pm <target id> <message>");
-            return true;
-
-        }
-
-        String idPart = p[1];
-
-        for (char c : idPart.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                sendToClient("Target id must be a number");
-                return true;
-            }
-        }
-
-        long toId = Long.parseLong(idPart);
-        String pm = p[2].trim();
-        if (pm.isEmpty()) {
-            sendToClient("Message cannot be empty. Use: /pm <targetId> <message>");
-            return true; 
-        }
-        server.sendPrivateMessage(this.clientId, toId, pm);
-        return true;
-//KarenRalda //10.23.25 //kar65
-    }
-
-    else if (trimmed.toLowerCase().startsWith("/shuffle ")) {
-        String raw = trimmed.substring(9).trim();
-        if (raw.isEmpty()) {
-        sendToClient("Usage: /shuffle <message>");
-        return true;
-        }
-        server.shuffleMessage(this, raw);
-        wasCommand = true;
-        return true;
-
-    
-    }
         if (message.startsWith(Constants.COMMAND_TRIGGER)) {
             // expected format will be csv for now to keep it simple
             String[] commandData = message.split(",");
@@ -251,6 +257,11 @@ public class ServerThread extends Thread {
                     // added more cases/breaks as needed for other commands
                     default:
                         break;
+
+                    case "flip" :
+                        server.flipCoin(this);
+                        wasCommand = true;
+                        break;
                 }
             }
 
@@ -269,5 +280,6 @@ public class ServerThread extends Thread {
         }
         info("ServerThread cleanup() end");
     }
-
 }
+
+

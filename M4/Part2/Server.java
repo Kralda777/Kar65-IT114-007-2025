@@ -34,6 +34,7 @@ private final HashMap<Integer, ServerThread> clients = new HashMap<>();
                     System.out.println("Client killed server");
                     break;
                 } else if (fromClient.startsWith("/reverse")) {
+             
                     // another example of server-side command
                     // Note: In the future command format processing will be client-side
                     // then client will send just the necessary data to the server so the server
