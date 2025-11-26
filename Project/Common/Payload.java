@@ -1,3 +1,5 @@
+//Kar65 //Nov25th2025 //KarenRalda
+// 
 package Project.Common;
 
 import java.io.Serializable;
@@ -36,7 +38,7 @@ public class Payload implements Serializable {
     }
 
     /**
-     * @return the message
+     * @return 
      */
     public String getMessage() {
         return message;
@@ -54,3 +56,5 @@ public class Payload implements Serializable {
         return String.format("Payload[%s] Client Id [%s] Message: [%s]", getPayloadType(), getClientId(), getMessage());
     }
 }
+
+//Kar65 ///KarenRalda  //Nov25th2025 

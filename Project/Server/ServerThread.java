@@ -222,6 +222,48 @@ public class ServerThread extends Thread {
 
         server.sendPrivateMessage(this,toId, pm);
         return true;
+
+        }
+
+         if (message != null && message.toLowerCase().startsWith("/pick")) {
+            String[] p = message.trim().split("\\s+", 2);
+            if (p.length < 2) {
+                sendToClient("Usage: /pick <rock|paper|scissors>");
+                return true;
+            }
+
+            String choice = p[1].trim().toLowerCase();
+            char normalizedChoice;
+
+            switch (choice) {
+                case "r":
+                case "rock":
+                    normalizedChoice = 'R';
+                    break;
+                case "p":
+                case "paper":
+                    normalizedChoice = 'P';
+                    break;
+                case "s":
+                case "scissor":
+                case "scissors":
+                    normalizedChoice = 'S';
+                    break;
+                default:
+                    sendToClient("Invalid choice. Use rock/paper/scissors.");
+                    return true;
+            }
+
+            
+            server.receiveRPSChoice(this, normalizedChoice);
+
+            // Confirm to the player
+            String label = normalizedChoice == 'R' ? "ROCK"
+                           : normalizedChoice == 'P' ? "PAPER"
+                           : "SCISSORS";
+            sendToClient("You picked " + label);
+
+            return true;
         }
 
     
