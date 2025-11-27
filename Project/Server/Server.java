@@ -223,6 +223,7 @@ public class Server {
             roomLog("removed room " + name);
         }
     }
+    //Karenralda //Kar65 //November 2025
 
     // Milestone 2 – handle a player's rock/paper/scissors choice
     protected synchronized void receiveRPSChoice(ServerThread player, char choice) {
@@ -237,6 +238,7 @@ public class Server {
         }
 
         // Store this player's choice
+        //Karenralda //Kar65 //November25th2025
         rpsChoice.put(player, choice);
 
         relay(null, "User[" + player.getClientId() + "] locked in their choice.");
@@ -267,6 +269,7 @@ public class Server {
         Character winningChoice = null;
 
         // Determine winning choice
+        //Kar65 //KarenRalda //November25th
         if (hasR && hasP && !hasS) {
             winningChoice = 'P';
         } else if (hasP && hasS && !hasR) {
@@ -305,7 +308,7 @@ public class Server {
 
             relay(null, "Round result: " + winLabel + " wins. Winners: " + winners + "Losers: " + losers);
         }
-
+//KarenRalda //Kar65 //Nov252025
         // Clear choices for next round
         connectedClients.values().forEach(c -> rpsChoice.put(c, null));
 

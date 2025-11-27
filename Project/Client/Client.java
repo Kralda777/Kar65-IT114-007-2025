@@ -233,7 +233,7 @@ public class Client {
         }
         System.out.println("listenToInput thread stopped");
     }
-
+//Kar65 //Karenralda //November26th2025
     private void sendToServer(String message) throws IOException {
         if (isConnected()) {
             out.writeObject(message);
