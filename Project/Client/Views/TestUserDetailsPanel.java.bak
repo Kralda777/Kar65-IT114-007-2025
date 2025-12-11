@@ -1,0 +1,25 @@
+package Project.Client.Views;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class TestUserDetailsPanel {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            // Create the frame
+            JFrame frame = new JFrame("Test User Details Panel - kar65");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(400, 250);
+
+            // Use your actual UserDetailsPanel
+            UserDetailsPanel panel = new UserDetailsPanel(); // no arguments
+
+            frame.setLayout(new BorderLayout());
+            frame.add(panel, BorderLayout.CENTER);
+
+            // Show window
+            frame.setVisible(true);
+        });
+    }
+}
+
