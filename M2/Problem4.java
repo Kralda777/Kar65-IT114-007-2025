@@ -32,7 +32,7 @@ public class Problem4 extends BaseClass {
         for(int i = 0; i <arr.length; i++){
             // Start Solution Edits
             //Kar65 09.30.25
-            //Step1:  Using replaceAll to remove non-alphaanumeric chracters.(replaceAll("[A-za-z0-9 ]", "")) except spaces.
+            //Step1:  Using replaceAll("[^A-Za-z0-9 ], "") to remove non-alphaanumeric chracters.(replaceAll("[A-za-z0-9 ]", "")) except spaces.
             //Step2: Using String methods to make title case.
             //Step3:Using trip to remove spaces at beginning and end,  using replaceALl to remove duplicate entries.
             //Step4:Assigning result to placeholderForModifiedPhrase
@@ -68,7 +68,7 @@ public class Problem4 extends BaseClass {
                 if(s.length() <= 2) {
                     placeholderForMiddleCharacters = " Not enough characters";
                 } else{
-                    int n = s.length();
+                    int n = s.length(); //index checking
                     int start = n/2; 
                     if (start ==0) start = 1; //Skipping first character
                     if (start >= n -1) start = n- 2; // Skipping last character
@@ -79,8 +79,6 @@ public class Problem4 extends BaseClass {
                         placeholderForMiddleCharacters = s.substring(start, end);
                     }
             }
-
-
 
              // End Solution Edits
             System.out.println(String.format("Index[%d] \"%s\" | Middle: \"%s\"",i, placeholderForModifiedPhrase, placeholderForMiddleCharacters));
